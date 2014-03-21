@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Otom.Core;
 
-namespace OTOM
+namespace Otom.Core
 {
     [Serializable]
     public class Mapping

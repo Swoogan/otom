@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace OTOM
+namespace Otom.Core
 {
     [Serializable]
     public class PropertyPair

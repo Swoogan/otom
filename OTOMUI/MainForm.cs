@@ -4,8 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
-
-using OTOM;
+using Otom.Core;
 using Otom.Properties;
 
 namespace Otom
