@@ -146,7 +146,7 @@ namespace OTOMUI
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            new AboutOTOM().Show(this);
+            new AboutForm().Show(this);
         }
 
         #region Loading and Saving
