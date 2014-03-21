@@ -11,14 +11,16 @@ namespace Otom
 {
     public partial class MainForm : Form
     {
-        private Type SourceClass
+        private Mapping _mapping;
+
+        private ClassInfo SourceClass
         {
-            get { return (Type) lbClassSource.SelectedItem; }
+            get { return (ClassInfo)lbClassSource.SelectedItem; }
         }
 
-        private Type DestClass
+        private ClassInfo DestClass
         {
-            get { return (Type) lbClassDestination.SelectedItem; }
+            get { return (ClassInfo)lbClassDestination.SelectedItem; }
         }
 
         public MainForm()
@@ -76,21 +78,21 @@ namespace Otom
 
             if (txtAssemblyDestination.Text.Equals(txtAssemblySource.Text))
             {
-                var classes = classInfo.GetClassesFromAssembly().ToList();
+                var classes = classInfo.GetClasses();
                 BindListBox(lbClassSource, classes, "Name");
                 BindListBox(lbClassDestination, classes, "Name");
             }
             else
             {
-                BindListBox(lbClassSource, classInfo.GetClassesFromAssembly(), "Name");
+                BindListBox(lbClassSource, classInfo.GetClasses(), "Name");
                 var destInfo = new AssemblyInfo(txtAssemblyDestination.Text);
-                BindListBox(lbClassDestination, destInfo.GetClassesFromAssembly(), "Name");
+                BindListBox(lbClassDestination, destInfo.GetClasses(), "Name");
             }
         }
 
-        private static void BindListBox(ListControl listBox, IEnumerable<Type> collection, String displayName)
+        private static void BindListBox(ListControl listBox, IEnumerable<ClassInfo> collection, String displayName)
         {
-            listBox.DataSource = collection.OrderBy(p => p.Name).ToList();
+            listBox.DataSource = collection.OrderBy(c => c.Name).ToList();
             listBox.DisplayMember = displayName;
         }
 
@@ -102,19 +104,21 @@ namespace Otom
 
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindListBox(lbPropertySource, SourceClass.GetProperties(), "Name");
+            BindListBox(lbPropertySource, SourceClass.Properties, "Name");
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindListBox(lbPropertyDestination, DestClass.GetProperties(), "Name");
+            BindListBox(lbPropertyDestination, DestClass.Properties, "Name");
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
         {
             if (lbPropertySource.SelectedItem == null || lbPropertyDestination.SelectedItem == null) return;
-            var pair = new PropertyPair((PropertyInfo) lbPropertySource.SelectedItem,
-                (PropertyInfo) lbPropertyDestination.SelectedItem);
+
+            var source = (PropertyInfo) lbPropertySource.SelectedItem;
+            var dest = (PropertyInfo) lbPropertyDestination.SelectedItem;
+            var pair = new PropertyMapping(source, dest);
             lbPairs.Items.Add(pair);
         }
 
@@ -122,8 +126,8 @@ namespace Otom
         {
             if (lbPairs.Items.Count > 0)
             {
-                var pairs = new List<PropertyPair>(lbPairs.Items.Count);
-                pairs.AddRange(lbPairs.Items.Cast<PropertyPair>());
+                var pairs = new List<PropertyMapping>(lbPairs.Items.Count);
+                pairs.AddRange(lbPairs.Items.Cast<PropertyMapping>());
                 var mapping = ObjectMapper.Map(pairs, SourceClass, DestClass, cbIncludeReverseMapping.Checked);
                 new CodeMapping(mapping).ShowDialog(this);
             }
@@ -173,8 +177,8 @@ namespace Otom
                 if (saveMappingDialog.ShowDialog() != DialogResult.OK) return;
                 var filename = saveMappingDialog.FileName;
 
-                var mapping = new Mapping(lbPairs.Items);
-                mapping.SaveToDisk(filename);
+                _mapping.SetPairs(lbPairs.Items);
+                _mapping.SaveToDisk(filename);
             }
             else
             {
@@ -206,7 +210,12 @@ namespace Otom
 
             lbClassSource.SelectedItem = mapping.GetFirstSource();
             lbClassDestination.SelectedItem = mapping.GetFirstDest();
-            lbPairs.Items.AddRange(mapping.GetPairs().ToArray());
+            lbPairs.Items.AddRange(GetPairs(mapping).ToArray());
+        }
+
+        private static IEnumerable<Object> GetPairs(Mapping mapping)
+        {
+            return mapping.PropertyMappings.Select(p => p);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Otom.Core
@@ -10,31 +11,31 @@ namespace Otom.Core
     [Serializable]
     public class Mapping
     {
-        private readonly AssemblyInfo _destInfo;
-        private readonly AssemblyInfo _sourceInfo;
-        public string SourceAssembly { get; set; }
-        public string DestinationAssembly { get; set; }
-        public List<PropertyMapping> PropertyMappings { get; set; }
+        private readonly Assembly _destInfo;
+        private readonly Assembly _sourceInfo;
+        private List<PropertyMapping> _propertyMappings;
 
-        public Mapping(IList pairs)
+        public List<PropertyMapping> PropertyMappings
         {
-            var propertyPair = (PropertyPair)pairs[0];
+            get { return _propertyMappings; }
+        }
 
-            if (propertyPair.Source.DeclaringType == null)
-                throw new ArgumentException("Source declaring type must not be null");
-            SourceAssembly = propertyPair.Source.DeclaringType.Assembly.Location;
-            _sourceInfo = new AssemblyInfo(SourceAssembly);
+        public string SourceAssembly 
+        {
+            get { return _sourceInfo.Location; }
+        }
+        
+        public string DestinationAssembly 
+        {
+            get { return _destInfo.Location; }
+        }
 
-            if (propertyPair.Destination.DeclaringType == null)
-                throw new ArgumentException("Destination declaring type must not be null");
-            DestinationAssembly = propertyPair.Destination.DeclaringType.Assembly.Location;
-            _destInfo = new AssemblyInfo(DestinationAssembly);
+        public Mapping(Assembly source, Assembly destination, IEnumerable pairs)
+        {
+            _sourceInfo = source;
+            _destInfo = destination;
 
-            PropertyMappings = new List<PropertyMapping>();
-            foreach (PropertyPair pair in pairs)
-            {
-                PropertyMappings.Add(new PropertyMapping(pair));
-            }
+            _propertyMappings = new List<PropertyMapping>();
         }
 
         public void SaveToDisk(string path)
@@ -49,21 +50,12 @@ namespace Otom.Core
 
         public Type GetFirstSource()
         {
-            return _sourceInfo.GetTypeByName(PropertyMappings[0].SourceType);
+            return _sourceInfo.GetType(_propertyMappings[0].Source.Type);
         }
 
         public Type GetFirstDest()
         {
-            return _destInfo.GetTypeByName(PropertyMappings[0].DestinationType);
-        }
-
-        public IEnumerable<Object> GetPairs()
-        {
-            return PropertyMappings.Select(propMapping => new PropertyPair
-            {
-                Source = _sourceInfo.GetPropertyByName(propMapping.SourceType, propMapping.SourceName),
-                Destination = _destInfo.GetPropertyByName(propMapping.DestinationType, propMapping.DestinationName)
-            });
+            return _destInfo.GetType(_propertyMappings[0].Destination.Type);
         }
 
         public static Mapping LoadFromDisk(string path)
@@ -78,6 +70,13 @@ namespace Otom.Core
 
                 return (Mapping) o;
             }
+        }
+
+        public void SetPairs(IEnumerable pairs)
+        {
+            _propertyMappings = new List<PropertyMapping>();
+            foreach (PropertyMapping pair in pairs)
+                _propertyMappings.Add(pair);
         }
     }
 }

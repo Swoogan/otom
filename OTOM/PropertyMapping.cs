@@ -1,22 +1,29 @@
 ﻿using System;
+using System.Reflection;
 
 namespace Otom.Core
 {
     [Serializable]
     public class PropertyMapping
     {
-        public string SourceName { get; set; }
-        public string SourceType { get; set; }
-        public string DestinationName { get; set; }
-        public string DestinationType { get; set; }
+        public PropInfo Source { get; set; }
+        public PropInfo Destination { get; set; }
 
-        public PropertyMapping(PropertyPair pair)
+        public PropertyMapping(PropertyInfo source, PropertyInfo destination)
         {
-            SourceName = pair.Source.Name;
-            SourceType = pair.Source.ReflectedType.FullName;
+            Source = new PropInfo(source);
+            Destination = new PropInfo(destination);
+        }
 
-            DestinationName = pair.Destination.Name;
-            DestinationType = pair.Destination.ReflectedType.FullName;
+        public PropertyMapping(PropInfo source, PropInfo destination)
+        {
+            Source = source;
+            Destination = destination;
+        }
+
+        public override string ToString()
+        {
+            return Source.Name + " --> " + Destination.Name;
         }
     }
 }

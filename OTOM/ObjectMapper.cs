@@ -10,7 +10,7 @@ namespace Otom.Core
         /**********************************
          * MAPPING with class intializers *
          * ********************************/
-        public static string Map(List<PropertyPair> pairs, Type source, Type destination, bool mapOpposite)
+        public static string Map(List<PropertyMapping> pairs, ClassInfo source, ClassInfo destination, bool mapOpposite)
         {
             var sb = new StringBuilder();
 
@@ -28,8 +28,8 @@ namespace Otom.Core
 
             sb.AppendLine();
 
-            var secondPairs = new List<PropertyPair>(pairs.Count);
-            secondPairs.AddRange(pairs.Select(pair => new PropertyPair(pair.Destination, pair.Source)));
+            var secondPairs = new List<PropertyMapping>(pairs.Count);
+            secondPairs.AddRange(pairs.Select(pair => new PropertyMapping(pair.Destination, pair.Source)));
             sb.AppendLine(Map(secondPairs, destination, source, false));
 
             return sb.ToString();
@@ -38,7 +38,7 @@ namespace Otom.Core
         /*****************************
          * MAPPING WITH AppendFormat *
          * ***************************/
-        public static string MapWithFormat(List<PropertyPair> pairs, Type source, Type destination, bool mapOpposite)
+        public static string MapWithFormat(List<PropertyMapping> pairs, ClassInfo source, ClassInfo destination, bool mapOpposite)
         {
             var sb = new StringBuilder();
 
@@ -56,8 +56,8 @@ namespace Otom.Core
 
             sb.AppendLine();
 
-            var secondPairs = new List<PropertyPair>(pairs.Count);
-            secondPairs.AddRange(pairs.Select(pair => new PropertyPair(pair.Destination, pair.Source)));
+            var secondPairs = new List<PropertyMapping>(pairs.Count);
+            secondPairs.AddRange(pairs.Select(pair => new PropertyMapping(pair.Destination, pair.Source)));
             sb.AppendLine(Map(secondPairs, destination, source, false));
 
             return sb.ToString();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Otom.Core
+namespace Otom
 {
     public class Constants
     {
