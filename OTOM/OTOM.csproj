@@ -60,7 +60,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+<<<<<<< HEAD
     <Compile Include="AssemblyInfo.cs" />
+=======
+    <Compile Include="ClassInfo.cs" />
+>>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
     <Compile Include="Mapping.cs" />
     <Compile Include="ObjectMapper.cs" />
     <Compile Include="OTOMConstants.cs" />
