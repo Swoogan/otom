@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 
 namespace Otom.Core
 {
@@ -8,20 +8,19 @@ namespace Otom.Core
     {
         public static void SaveToDisk(string path, MapFile mapping)
         {
-            using (var fs = new FileStream(path, FileMode.Create))
+            var serialzier = new XmlSerializer(typeof (MapFile));
+            using (var writer = new FileStream(path, FileMode.Create))
             {
-                var bf = new BinaryFormatter();
-                bf.Serialize(fs, mapping);
-                fs.Flush();
+                serialzier.Serialize(writer, mapping);
             }
         }
 
         public static MapFile LoadFromDisk(string path)
         {
-            using (var fs = new FileStream(path, FileMode.Open))
+            var serialzier = new XmlSerializer(typeof(MapFile));
+            using (var reader = new FileStream(path, FileMode.Open))
             {
-                var bf = new BinaryFormatter();
-                var o = bf.Deserialize(fs);
+                var o = serialzier.Deserialize(reader);
 
                 if (!(o is MapFile))
                     throw new ArgumentException("The file specified is not a OTOM mapping file.");

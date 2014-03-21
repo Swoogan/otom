@@ -222,16 +222,22 @@ namespace Otom
 
         private void LoadMapping(string filename)
         {
-            var mapping = MapStore.LoadFromDisk(filename);
+            try
+            {
+                var mapping = MapStore.LoadFromDisk(filename);
+                txtAssemblyDestination.Text = mapping.Destination.AssemblyPath;
+                txtAssemblySource.Text = mapping.Source.AssemblyPath;
 
-            txtAssemblyDestination.Text = mapping.Destination.AssemblyPath;
-            txtAssemblySource.Text = mapping.Source.AssemblyPath;
+                LoadAssemblies();
 
-            LoadAssemblies();
-
-            lbClassSource.SelectedIndex = lbClassSource.FindStringExact(mapping.Source.ClassType.Name);
-            lbClassDestination.SelectedIndex = lbClassSource.FindStringExact(mapping.Destination.ClassType.Name);
-            lbPairs.DataSource = mapping.PropertyPairs;
+                lbClassSource.SelectedIndex = lbClassSource.FindStringExact(mapping.Source.ClassType.Name);
+                lbClassDestination.SelectedIndex = lbClassSource.FindStringExact(mapping.Destination.ClassType.Name);
+                lbPairs.DataSource = mapping.PropertyPairs;
+            }
+            catch (InvalidOperationException)
+            {
+                MessageBox.Show(Resources.CouldntLoadMapping);
+            }
         }
     }
 }

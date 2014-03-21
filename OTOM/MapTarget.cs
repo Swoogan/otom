@@ -5,8 +5,12 @@ namespace Otom.Core
     [Serializable]
     public class MapTarget
     {
-        public string AssemblyPath { get; private set; }
-        public ClassInfo ClassType { get; private set; }
+        public string AssemblyPath { get; set; }
+        public ClassInfo ClassType { get; set; }
+
+        private MapTarget()
+        {
+        }
 
         public MapTarget(string assemblyPath, ClassInfo classType)
         {

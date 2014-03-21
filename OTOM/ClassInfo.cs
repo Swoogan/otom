@@ -6,9 +6,13 @@ namespace Otom.Core
     [Serializable]
     public class ClassInfo
     {
-        public string Namespace { get; private set; }
-        public string Name { get; private set; }
-        public List<string> Properties { get; private set; }
+        public string Namespace { get; set; }
+        public string Name { get; set; }
+        public List<string> Properties { get; set; }
+
+        private ClassInfo()
+        {
+        }
 
         public ClassInfo(Type type)
         {

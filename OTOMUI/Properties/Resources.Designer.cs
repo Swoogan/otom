@@ -60,6 +60,15 @@ namespace Otom.Properties {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to The mapping file was not in the correct format.
+        /// </summary>
+        internal static string CouldntLoadMapping {
+            get {
+                return ResourceManager.GetString("CouldntLoadMapping", resourceCulture);
+            }
+        }
+        
         internal static System.Drawing.Bitmap Logo_copy {
             get {
                 object obj = ResourceManager.GetObject("Logo_copy", resourceCulture);

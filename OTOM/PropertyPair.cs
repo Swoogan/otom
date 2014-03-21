@@ -5,8 +5,12 @@ namespace Otom.Core
     [Serializable]
     public class PropertyPair
     {
-        public string Source { get; private set; }
-        public string Destination { get; private set; }
+        public string Source { get; set; }
+        public string Destination { get; set; }
+
+        private PropertyPair()
+        {
+        }
 
         public PropertyPair(string source, string destination)
         {
