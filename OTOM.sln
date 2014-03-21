@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTOM", "OTOM\OTOM.csproj", "{D6221C47-F63F-476F-B438-1FFEEE5E6D51}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTOMUI", "OTOMUI\OTOMUI.csproj", "{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D6221C47-F63F-476F-B438-1FFEEE5E6D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6221C47-F63F-476F-B438-1FFEEE5E6D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6221C47-F63F-476F-B438-1FFEEE5E6D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6221C47-F63F-476F-B438-1FFEEE5E6D51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
