@@ -56,30 +56,19 @@ namespace OTOMUI
         {
             lbPairs.Items.Clear();
 
-<<<<<<< HEAD
             var classInfo = new AssemblyInfo(txtAssemblySource.Text);
 
             if (txtAssemblyDestination.Text.Equals(txtAssemblySource.Text))
             {
                 var classes = classInfo.GetClassesFromAssembly().ToList();
-=======
-            if (txtAssemblyDestination.Text.Equals(txtAssemblySource.Text))
-            {
-                var classes = ClassInfo.GetTypesFromAssembly(txtAssemblySource.Text).ToList();
->>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
                 BindListBox(lbClassSource, classes, "Name");
                 BindListBox(lbClassDestination, classes, "Name");
             }
             else
             {
-<<<<<<< HEAD
                 BindListBox(lbClassSource, classInfo.GetClassesFromAssembly(), "Name");
                 var destInfo = new AssemblyInfo(txtAssemblyDestination.Text);
                 BindListBox(lbClassDestination, destInfo.GetClassesFromAssembly(), "Name");
-=======
-                BindListBox(lbClassSource, ClassInfo.GetTypesFromAssembly(txtAssemblySource.Text), "Name");
-                BindListBox(lbClassDestination, ClassInfo.GetTypesFromAssembly(txtAssemblyDestination.Text), "Name");
->>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
             }
         }
 
@@ -97,22 +86,14 @@ namespace OTOMUI
 
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             var type = ((Type)lbClassSource.SelectedItem);
             BindListBox(lbPropertySource, type.GetProperties(), "Name");
-=======
-            BindListBox(lbPropertySource, ((Type)lbClassSource.SelectedItem).GetProperties(), "Name");
->>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-<<<<<<< HEAD
             var type = ((Type)lbClassDestination.SelectedItem);
             BindListBox(lbPropertyDestination, type.GetProperties(), "Name");
-=======
-            BindListBox(lbPropertyDestination, ((Type)lbClassDestination.SelectedItem).GetProperties(), "Name");
->>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
@@ -228,32 +209,18 @@ namespace OTOMUI
 
             btnLoad_Click(null, null);
 
-<<<<<<< HEAD
             var sourceInfo = new AssemblyInfo(mapping.SourceAssembly);
             lbClassSource.SelectedItem = sourceInfo.GetTypeByName(mapping.PropertyMappings[0].SourceType);
 
             var destInfo = new AssemblyInfo(mapping.DestinationAssembly);
             lbClassDestination.SelectedItem = destInfo.GetTypeByName(mapping.PropertyMappings[0].DestinationType);
-=======
-            lbClassSource.SelectedItem = ClassInfo.GetTypeByName(mapping.SourceAssembly, mapping.PropertyMappings[0].SourceType);
-            lbClassDestination.SelectedItem = ClassInfo.GetTypeByName(mapping.DestinationAssembly, mapping.PropertyMappings[0].DestinationType);
->>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
 
             foreach (var propMapping in mapping.PropertyMappings)
             {
                 var pair = new PropertyPair
                 {
-<<<<<<< HEAD
                     Source = sourceInfo.GetPropertyByName(propMapping.SourceType, propMapping.SourceName),
                     Destination = destInfo.GetPropertyByName(propMapping.DestinationType, propMapping.DestinationName)
-=======
-                    Source =
-                        ClassInfo.GetPropertyByName(mapping.SourceAssembly, propMapping.SourceType,
-                            propMapping.SourceName),
-                    Destination =
-                        ClassInfo.GetPropertyByName(mapping.DestinationAssembly, propMapping.DestinationType,
-                            propMapping.DestinationName)
->>>>>>> a811530542d78892b92fdb1deb04d17a2432e571
                 };
 
                 lbPairs.Items.Add(pair);
