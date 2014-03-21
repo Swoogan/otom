@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Otom.Core.Generate
 {
-    public class CodeGenerator
+    public static class CodeGenerator
     {
         public static string Generate(GenerateInfo info)
         {
@@ -17,7 +17,7 @@ namespace Otom.Core.Generate
             return result;
         }
 
-        private static string Map(IEnumerable<PropertyMapping> pairs, ClassInfo sourceClass, ClassInfo destClass, DirectionEnum direction)
+        private static string Map(IEnumerable<PropertyPair> pairs, ClassInfo sourceClass, ClassInfo destClass, DirectionEnum direction)
         {
             var sb = new StringBuilder();
             var parameterName = CreateParameterName(sourceClass.Name);
@@ -29,7 +29,7 @@ namespace Otom.Core.Generate
             var format = (direction == DirectionEnum.Forward) ? "\t\t{0} = {1}.{2},\n" : "\t\t{2} = {1}.{0},\n";
 
             foreach (var pair in pairs)
-                sb.AppendFormat(format, pair.Destination.Name, parameterName, pair.Source.Name);
+                sb.AppendFormat(format, pair.Destination, parameterName, pair.Source);
 
             sb.AppendFormat("\t}};\n");
             sb.AppendLine("}\n");
@@ -40,7 +40,7 @@ namespace Otom.Core.Generate
         /*****************************
          * MAPPING WITH AppendFormat *
          * ***************************/
-        private static string MapWithFormat(List<PropertyMapping> pairs, ClassInfo sourceClass, ClassInfo destClass, bool mapOpposite)
+        private static string MapWithFormat(List<PropertyPair> pairs, ClassInfo sourceClass, ClassInfo destClass, bool mapOpposite)
         {
             var sb = new StringBuilder();
 
@@ -52,7 +52,7 @@ namespace Otom.Core.Generate
             sb.AppendFormat("\t{0}.{1} {2} = new {3}.{4}();\n", destClass.Namespace, destClass.Name, destinationName, destClass.Namespace, destClass.Name);
 
             foreach (var p in pairs)
-                sb.AppendFormat("\t{0}.{1} = {2}.{3};\n", destinationName, p.Destination.Name, sourceName, p.Source.Name);
+                sb.AppendFormat("\t{0}.{1} = {2}.{3};\n", destinationName, p.Destination, sourceName, p.Source);
 
             sb.AppendFormat("\treturn {0};\n", destinationName);
             sb.AppendLine("}");
@@ -61,8 +61,8 @@ namespace Otom.Core.Generate
 
             sb.AppendLine();
 
-            var secondPairs = new List<PropertyMapping>(pairs.Count);
-            secondPairs.AddRange(pairs.Select(pair => new PropertyMapping(pair.Destination, pair.Source)));
+            var secondPairs = new List<PropertyPair>(pairs.Count);
+            secondPairs.AddRange(pairs.Select(pair => new PropertyPair(pair.Destination, pair.Source)));
             sb.AppendLine(MapWithFormat(secondPairs, destClass, sourceClass, false));
 
             return sb.ToString();

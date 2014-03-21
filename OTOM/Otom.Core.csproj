@@ -63,14 +63,14 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="ClassInfo.cs" />
     <Compile Include="ExcludesFile.cs" />
-    <Compile Include="Generate\ClassInfo.cs" />
     <Compile Include="Generate\DirectionEnum.cs" />
     <Compile Include="Generate\GenerateInfo.cs" />
-    <Compile Include="Mapping.cs" />
+    <Compile Include="MapFile.cs" />
     <Compile Include="Generate\CodeGenerator.cs" />
+    <Compile Include="MapStore.cs" />
+    <Compile Include="MapTarget.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyMapping.cs" />
-    <Compile Include="PropInfo.cs" />
+    <Compile Include="PropertyPair.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

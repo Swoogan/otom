@@ -6,14 +6,11 @@ using System.Windows.Forms;
 using Otom.Core;
 using Otom.Core.Generate;
 using Otom.Properties;
-using ClassInfo = Otom.Core.ClassInfo;
 
 namespace Otom
 {
     public partial class MainForm : Form
     {
-        private Mapping _mapping;
-
         private ClassInfo SourceClass
         {
             get { return (ClassInfo)lbClassSource.SelectedItem; }
@@ -84,8 +81,8 @@ namespace Otom
             }
 
             // TODO: This should only run if the assemblies successfully load
-            Settings.Default.LastSourceAssembly = sourceAssemblyDialog.FileName;
-            Settings.Default.LastDestinationAssembly = sourceAssemblyDialog.FileName;
+            Settings.Default.LastSourceAssembly = txtAssemblySource.Text;
+            Settings.Default.LastDestinationAssembly = txtAssemblyDestination.Text;
             Settings.Default.Save();
 
             lbPairs.Items.Clear();
@@ -97,14 +94,12 @@ namespace Otom
                 var classes = source.GetClasses();
                 BindClassListBox(lbClassSource, classes, "Name");
                 BindClassListBox(lbClassDestination, classes, "Name");
-                _mapping = new Mapping(source, source);
             }
             else
             {
                 BindClassListBox(lbClassSource, source.GetClasses(), "Name");
                 var destination = new AssemblyInfo(txtAssemblyDestination.Text);
                 BindClassListBox(lbClassDestination, destination.GetClasses(), "Name");
-                _mapping = new Mapping(source, destination);
             }
         }
 
@@ -116,43 +111,44 @@ namespace Otom
 
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindPropertyListBox(lbPropertySource, SourceClass.Properties, "Name");
+            var properties = new List<string>(SourceClass.Properties);
+            properties.Sort();
+            lbPropertySource.DataSource = properties;
+            //listBox.DisplayMember = displayName;
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindPropertyListBox(lbPropertyDestination, DestClass.Properties, "Name");
-        }
-
-        private static void BindPropertyListBox(ListControl listBox, IEnumerable<PropInfo> collection, String displayName)
-        {
-            listBox.DataSource = collection.OrderBy(p => p.Name).ToList();
-            listBox.DisplayMember = displayName;
+            var properties = new List<string>(DestClass.Properties);
+            properties.Sort();
+            lbPropertyDestination.DataSource = properties;
+            //listBox.DisplayMember = displayName;
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
         {
             if (lbPropertySource.SelectedItem == null || lbPropertyDestination.SelectedItem == null) return;
 
-            var source = (PropInfo) lbPropertySource.SelectedItem;
-            var dest = (PropInfo) lbPropertyDestination.SelectedItem;
-            var pair = new PropertyMapping(source, dest);
-            lbPairs.Items.Add(pair);
+            var source = lbPropertySource.SelectedValue.ToString();
+            var dest = lbPropertyDestination.SelectedValue.ToString();
+            lbPairs.Items.Add(new PropertyPair(source, dest));
         }
 
         private void btnGenerate_Click(object sender, EventArgs e)
         {
             if (lbPairs.Items.Count > 0)
             {
-                var pairs = new List<PropertyMapping>(lbPairs.Items.Count);
-                pairs.AddRange(lbPairs.Items.Cast<PropertyMapping>());
+                var pairs = new List<PropertyPair>(lbPairs.Items.Count);
+                pairs.AddRange(lbPairs.Items.Cast<PropertyPair>());
+
                 var generatedCode = CodeGenerator.Generate(new GenerateInfo
                 {
-                  SourceClass = new Core.Generate.ClassInfo(SourceClass), 
-                  DestinationClass = new Core.Generate.ClassInfo(DestClass),
+                  SourceClass = SourceClass, 
+                  DestinationClass = DestClass,
                   Pairs = pairs, 
                   Reverse = cbIncludeReverseMapping.Checked
                 });
+
                 new GeneratedCodeForm(generatedCode).ShowDialog(this);
             }
             else
@@ -201,14 +197,26 @@ namespace Otom
                 if (saveMappingDialog.ShowDialog() != DialogResult.OK) return;
                 var filename = saveMappingDialog.FileName;
 
-                _mapping.SetPairs(lbPairs.Items);
-                _mapping.SaveToDisk(filename);
+                // TODO: Re-validate that they entered stuff
+                var mapfile = new MapFile
+                {
+                    Destination = new MapTarget(txtAssemblySource.Text, SourceClass),
+                    Source = new MapTarget(txtAssemblyDestination.Text, DestClass),
+                    PropertyPairs = lbPairs.Items.Cast<PropertyPair>().ToList()
+                };
+                
+                MapStore.SaveToDisk(filename, mapfile);
             }
             else
             {
                 const string message = "You must specifiy at least one property mapping before you can save.";
                 MessageBox.Show(message, @"Unable to save mapping.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
+        }
+
+        private string GenerateFileName()
+        {
+            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, Constants.FileExtention);
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -218,28 +226,18 @@ namespace Otom
             LoadMapping(filename);
         }
 
-        private string GenerateFileName()
-        {
-            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, Constants.FileExtention);
-        }
-
         private void LoadMapping(string filename)
         {
-            var mapping = Mapping.LoadFromDisk(filename);
+            var mapping = MapStore.LoadFromDisk(filename);
 
-            txtAssemblyDestination.Text = mapping.DestinationAssembly;
-            txtAssemblySource.Text = mapping.SourceAssembly;
+            txtAssemblyDestination.Text = mapping.Destination.AssemblyPath;
+            txtAssemblySource.Text = mapping.Source.AssemblyPath;
 
             LoadAssemblies();
 
-            lbClassSource.SelectedItem = mapping.GetFirstSource();
-            lbClassDestination.SelectedItem = mapping.GetFirstDest();
-            lbPairs.Items.AddRange(GetPairs(mapping).ToArray());
-        }
-
-        private static IEnumerable<Object> GetPairs(Mapping mapping)
-        {
-            return mapping.PropertyMappings.Select(p => p);
+            lbClassSource.SelectedItem = mapping.Source.ClassType;
+            lbClassDestination.SelectedItem = mapping.Destination.ClassType;
+            lbPairs.DataSource = mapping.PropertyPairs;
         }
     }
 }
