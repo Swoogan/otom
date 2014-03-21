@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -12,9 +13,23 @@ namespace OTOM
         public string DestinationAssembly { get; set; }
         public List<PropertyMapping> PropertyMappings { get; set; }
 
-        public Mapping()
+        public Mapping(IList pairs)
         {
+            var propertyPair = (PropertyPair)pairs[0];
+
+            if (propertyPair.Source.DeclaringType == null)
+                throw new ArgumentException("Source declaring type must not be null");
+            SourceAssembly = propertyPair.Source.DeclaringType.Assembly.Location;
+
+            if (propertyPair.Destination.DeclaringType == null)
+                throw new ArgumentException("Destination declaring type must not be null");
+            DestinationAssembly = propertyPair.Destination.DeclaringType.Assembly.Location;
+
             PropertyMappings = new List<PropertyMapping>();
+            foreach (PropertyPair pair in pairs)
+            {
+                PropertyMappings.Add(new PropertyMapping(pair));
+            }
         }
 
         public void SaveToDisk(string path)

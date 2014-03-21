@@ -37,6 +37,7 @@ namespace OTOMUI
             sourceAssemblyDialog.InitialDirectory = Settings.Default.SourceInitialDir;
             if (sourceAssemblyDialog.ShowDialog() != DialogResult.OK) return;
             txtAssemblySource.Text = sourceAssemblyDialog.FileName;
+            
             Settings.Default.LastSourceAssembly = sourceAssemblyDialog.FileName;
             Settings.Default.SourceInitialDir = Path.GetDirectoryName(sourceAssemblyDialog.FileName);
             Settings.Default.Save();
@@ -47,6 +48,7 @@ namespace OTOMUI
             destAssemblyDialog.InitialDirectory = Settings.Default.DestInitialDir;
             if (destAssemblyDialog.ShowDialog() != DialogResult.OK) return;
             txtAssemblyDestination.Text = destAssemblyDialog.FileName;
+
             Settings.Default.LastDestinationAssembly = sourceAssemblyDialog.FileName;
             Settings.Default.DestInitialDir = Path.GetDirectoryName(destAssemblyDialog.FileName);
             Settings.Default.Save();
@@ -86,14 +88,12 @@ namespace OTOMUI
 
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var type = ((Type)lbClassSource.SelectedItem);
-            BindListBox(lbPropertySource, type.GetProperties(), "Name");
+            BindListBox(lbPropertySource, SourceClass.GetProperties(), "Name");
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var type = ((Type)lbClassDestination.SelectedItem);
-            BindListBox(lbPropertyDestination, type.GetProperties(), "Name");
+            BindListBox(lbPropertyDestination, DestClass.GetProperties(), "Name");
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
@@ -109,7 +109,7 @@ namespace OTOMUI
             {
                 var pairs = new List<PropertyPair>(lbPairs.Items.Count);
                 pairs.AddRange(lbPairs.Items.Cast<PropertyPair>());
-                var mapping = ObjectMapper.Map(pairs, (Type)lbClassSource.SelectedItem, (Type)lbClassDestination.SelectedItem, cbIncludeReverseMapping.Checked);
+                var mapping = ObjectMapper.Map(pairs, SourceClass, DestClass, cbIncludeReverseMapping.Checked);
                 new CodeMapping(mapping).ShowDialog(this);
             }
             else
@@ -155,12 +155,11 @@ namespace OTOMUI
         {
             if (lbPairs.Items.Count > 0)
             {
-                var mapping = CreateMapping();
-
                 saveMappingDialog.FileName = GenerateFileName();
-
-                if (saveMappingDialog.ShowDialog(this) != DialogResult.OK) return;
+                if (saveMappingDialog.ShowDialog() != DialogResult.OK) return;
                 var filename = saveMappingDialog.FileName;
+
+                var mapping = new Mapping(lbPairs.Items);
                 mapping.SaveToDisk(filename);
             }
             else
@@ -170,27 +169,19 @@ namespace OTOMUI
             }
         }
 
-        private string GenerateFileName()
+        private Type SourceClass
         {
-            return string.Format("{0}To{1}{2}", ((Type)lbClassSource.SelectedItem).Name, ((Type)lbClassDestination.SelectedItem).Name, OtomConstants.FileExtention);
+            get { return (Type)lbClassSource.SelectedItem; }
         }
 
-        private Mapping CreateMapping()
+        private Type DestClass
         {
-            var propertyPair = (PropertyPair)lbPairs.Items[0];
+            get { return (Type)lbClassDestination.SelectedItem; }
+        }
 
-            var mapping = new Mapping
-            {
-                SourceAssembly = propertyPair.Source.DeclaringType.Assembly.Location, 
-                DestinationAssembly = propertyPair.Destination.DeclaringType.Assembly.Location
-            };
-
-            foreach (PropertyPair pair in lbPairs.Items)
-            {
-                mapping.PropertyMappings.Add(new PropertyMapping(pair));
-            }
-
-            return mapping;
+        private string GenerateFileName()
+        {
+            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, OtomConstants.FileExtention);
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
