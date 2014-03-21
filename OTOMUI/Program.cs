@@ -13,7 +13,7 @@ namespace OTOMUI
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ObjectToObjectMapper());
+            Application.Run(new MainForm());
         }
     }
 }
