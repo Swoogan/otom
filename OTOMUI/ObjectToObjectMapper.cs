@@ -56,16 +56,19 @@ namespace OTOMUI
         {
             lbPairs.Items.Clear();
 
+            var classInfo = new AssemblyInfo(txtAssemblySource.Text);
+
             if (txtAssemblyDestination.Text.Equals(txtAssemblySource.Text))
             {
-                var classes = ClassInfo.GetTypesFromAssembly(txtAssemblySource.Text).ToList();
+                var classes = classInfo.GetClassesFromAssembly().ToList();
                 BindListBox(lbClassSource, classes, "Name");
                 BindListBox(lbClassDestination, classes, "Name");
             }
             else
             {
-                BindListBox(lbClassSource, ClassInfo.GetTypesFromAssembly(txtAssemblySource.Text), "Name");
-                BindListBox(lbClassDestination, ClassInfo.GetTypesFromAssembly(txtAssemblyDestination.Text), "Name");
+                BindListBox(lbClassSource, classInfo.GetClassesFromAssembly(), "Name");
+                var destInfo = new AssemblyInfo(txtAssemblyDestination.Text);
+                BindListBox(lbClassDestination, destInfo.GetClassesFromAssembly(), "Name");
             }
         }
 
@@ -83,12 +86,14 @@ namespace OTOMUI
 
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindListBox(lbPropertySource, ((Type)lbClassSource.SelectedItem).GetProperties(), "Name");
+            var type = ((Type)lbClassSource.SelectedItem);
+            BindListBox(lbPropertySource, type.GetProperties(), "Name");
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindListBox(lbPropertyDestination, ((Type)lbClassDestination.SelectedItem).GetProperties(), "Name");
+            var type = ((Type)lbClassDestination.SelectedItem);
+            BindListBox(lbPropertyDestination, type.GetProperties(), "Name");
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
@@ -204,19 +209,18 @@ namespace OTOMUI
 
             btnLoad_Click(null, null);
 
-            lbClassSource.SelectedItem = ClassInfo.GetTypeByName(mapping.SourceAssembly, mapping.PropertyMappings[0].SourceType);
-            lbClassDestination.SelectedItem = ClassInfo.GetTypeByName(mapping.DestinationAssembly, mapping.PropertyMappings[0].DestinationType);
+            var sourceInfo = new AssemblyInfo(mapping.SourceAssembly);
+            lbClassSource.SelectedItem = sourceInfo.GetTypeByName(mapping.PropertyMappings[0].SourceType);
+
+            var destInfo = new AssemblyInfo(mapping.DestinationAssembly);
+            lbClassDestination.SelectedItem = destInfo.GetTypeByName(mapping.PropertyMappings[0].DestinationType);
 
             foreach (var propMapping in mapping.PropertyMappings)
             {
                 var pair = new PropertyPair
                 {
-                    Source =
-                        ClassInfo.GetPropertyByName(mapping.SourceAssembly, propMapping.SourceType,
-                            propMapping.SourceName),
-                    Destination =
-                        ClassInfo.GetPropertyByName(mapping.DestinationAssembly, propMapping.DestinationType,
-                            propMapping.DestinationName)
+                    Source = sourceInfo.GetPropertyByName(propMapping.SourceType, propMapping.SourceName),
+                    Destination = destInfo.GetPropertyByName(propMapping.DestinationType, propMapping.DestinationName)
                 };
 
                 lbPairs.Items.Add(pair);

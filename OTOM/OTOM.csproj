@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClassInfo.cs" />
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Mapping.cs" />
     <Compile Include="ObjectMapper.cs" />
     <Compile Include="OTOMConstants.cs" />

@@ -11,15 +11,14 @@ namespace OTOMUI
             txtGeneratedCode.Text = codeMapping;
         }
 
-        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
-
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            Clipboard.SetText(txtGeneratedCode.SelectedText);
+        }
+
+        private void CodeMapping_Load(object sender, EventArgs e)
+        {
             Clipboard.SetText(txtGeneratedCode.Text);
-            MessageBox.Show("Copied to clipboard!", "Complete!", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
