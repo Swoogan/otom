@@ -111,18 +111,12 @@ namespace Otom
 
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var properties = new List<string>(SourceClass.Properties);
-            properties.Sort();
-            lbPropertySource.DataSource = properties;
-            //listBox.DisplayMember = displayName;
+            lbPropertySource.DataSource = SourceClass.Properties;
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var properties = new List<string>(DestClass.Properties);
-            properties.Sort();
-            lbPropertyDestination.DataSource = properties;
-            //listBox.DisplayMember = displayName;
+            lbPropertyDestination.DataSource = DestClass.Properties;
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
@@ -235,8 +229,8 @@ namespace Otom
 
             LoadAssemblies();
 
-            lbClassSource.SelectedItem = mapping.Source.ClassType;
-            lbClassDestination.SelectedItem = mapping.Destination.ClassType;
+            lbClassSource.SelectedIndex = lbClassSource.FindStringExact(mapping.Source.ClassType.Name);
+            lbClassDestination.SelectedIndex = lbClassSource.FindStringExact(mapping.Destination.ClassType.Name);
             lbPairs.DataSource = mapping.PropertyPairs;
         }
     }

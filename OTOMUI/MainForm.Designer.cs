@@ -133,6 +133,7 @@
             this.lbClassSource.Location = new System.Drawing.Point(12, 191);
             this.lbClassSource.Name = "lbClassSource";
             this.lbClassSource.Size = new System.Drawing.Size(242, 212);
+            this.lbClassSource.Sorted = true;
             this.lbClassSource.TabIndex = 6;
             this.lbClassSource.SelectedIndexChanged += new System.EventHandler(this.cbClassSource_SelectedIndexChanged);
             // 
@@ -145,6 +146,7 @@
             this.lbClassDestination.Location = new System.Drawing.Point(278, 191);
             this.lbClassDestination.Name = "lbClassDestination";
             this.lbClassDestination.Size = new System.Drawing.Size(199, 212);
+            this.lbClassDestination.Sorted = true;
             this.lbClassDestination.TabIndex = 7;
             this.lbClassDestination.SelectedIndexChanged += new System.EventHandler(this.cbClassDestination_SelectedIndexChanged);
             // 
@@ -368,7 +370,7 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Assemblies";
             // 
-            // ObjectToObjectMapper
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -392,7 +394,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MinimumSize = new System.Drawing.Size(800, 640);
-            this.Name = "ObjectToObjectMapper";
+            this.Name = "MainForm";
             this.Text = "Object To Object Mapper";
             this.Load += new System.EventHandler(this.ObjectToObjectMapper_Load);
             this.menuStrip1.ResumeLayout(false);
