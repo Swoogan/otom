@@ -11,6 +11,16 @@ namespace Otom
 {
     public partial class MainForm : Form
     {
+        private Type SourceClass
+        {
+            get { return (Type) lbClassSource.SelectedItem; }
+        }
+
+        private Type DestClass
+        {
+            get { return (Type) lbClassDestination.SelectedItem; }
+        }
+
         public MainForm()
         {
             InitializeComponent();
@@ -36,7 +46,7 @@ namespace Otom
             sourceAssemblyDialog.InitialDirectory = Settings.Default.SourceInitialDir;
             if (sourceAssemblyDialog.ShowDialog() != DialogResult.OK) return;
             txtAssemblySource.Text = sourceAssemblyDialog.FileName;
-            
+
             Settings.Default.LastSourceAssembly = sourceAssemblyDialog.FileName;
             Settings.Default.SourceInitialDir = Path.GetDirectoryName(sourceAssemblyDialog.FileName);
             Settings.Default.Save();
@@ -54,6 +64,11 @@ namespace Otom
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
+        {
+            LoadAssemblies();
+        }
+
+        private void LoadAssemblies()
         {
             lbPairs.Items.Clear();
 
@@ -98,7 +113,8 @@ namespace Otom
         private void btnAddMapping_Click(object sender, EventArgs e)
         {
             if (lbPropertySource.SelectedItem == null || lbPropertyDestination.SelectedItem == null) return;
-            var pair = new PropertyPair((PropertyInfo)lbPropertySource.SelectedItem, (PropertyInfo)lbPropertyDestination.SelectedItem);
+            var pair = new PropertyPair((PropertyInfo) lbPropertySource.SelectedItem,
+                (PropertyInfo) lbPropertyDestination.SelectedItem);
             lbPairs.Items.Add(pair);
         }
 
@@ -114,7 +130,8 @@ namespace Otom
             else
             {
                 const string message = "You must specifiy at least one property mapping before you can generate.";
-                MessageBox.Show(message, @"Unable to generate mapping.", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(message, @"Unable to generate mapping.", MessageBoxButtons.OK,
+                    MessageBoxIcon.Exclamation);
             }
         }
 
@@ -148,8 +165,6 @@ namespace Otom
             new AboutForm().Show(this);
         }
 
-        #region Loading and Saving
-
         private void btnSaveMapping_Click(object sender, EventArgs e)
         {
             if (lbPairs.Items.Count > 0)
@@ -168,21 +183,6 @@ namespace Otom
             }
         }
 
-        private Type SourceClass
-        {
-            get { return (Type)lbClassSource.SelectedItem; }
-        }
-
-        private Type DestClass
-        {
-            get { return (Type)lbClassDestination.SelectedItem; }
-        }
-
-        private string GenerateFileName()
-        {
-            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, Constants.FileExtention);
-        }
-
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (openMappingDialog.ShowDialog() != DialogResult.OK) return;
@@ -190,33 +190,24 @@ namespace Otom
             LoadMapping(filename);
         }
 
-        private void LoadMapping(String filename)
+        private string GenerateFileName()
+        {
+            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, Constants.FileExtention);
+        }
+
+        private void LoadMapping(string filename)
         {
             var mapping = Mapping.LoadFromDisk(filename);
 
             txtAssemblyDestination.Text = mapping.DestinationAssembly;
             txtAssemblySource.Text = mapping.SourceAssembly;
 
-            btnLoad_Click(null, null);
+            LoadAssemblies();
 
-            var sourceInfo = new AssemblyInfo(mapping.SourceAssembly);
-            lbClassSource.SelectedItem = sourceInfo.GetTypeByName(mapping.PropertyMappings[0].SourceType);
-
-            var destInfo = new AssemblyInfo(mapping.DestinationAssembly);
-            lbClassDestination.SelectedItem = destInfo.GetTypeByName(mapping.PropertyMappings[0].DestinationType);
-
-            foreach (var propMapping in mapping.PropertyMappings)
-            {
-                var pair = new PropertyPair
-                {
-                    Source = sourceInfo.GetPropertyByName(propMapping.SourceType, propMapping.SourceName),
-                    Destination = destInfo.GetPropertyByName(propMapping.DestinationType, propMapping.DestinationName)
-                };
-
-                lbPairs.Items.Add(pair);
-            }
+            lbClassSource.SelectedItem = mapping.GetFirstSource();
+            lbClassDestination.SelectedItem = mapping.GetFirstDest();
+            lbPairs.Items.AddRange(mapping.GetPairs().ToArray());
         }
-
-        #endregion
     }
 }
+
