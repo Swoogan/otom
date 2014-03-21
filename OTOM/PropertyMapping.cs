@@ -11,8 +11,8 @@ namespace Otom.Core
 
         public PropertyMapping(PropertyInfo source, PropertyInfo destination)
         {
-            Source = new PropInfo(source);
-            Destination = new PropInfo(destination);
+            Source = new PropInfo(source.Name, source.DeclaringType);
+            Destination = new PropInfo(destination.Name, destination.DeclaringType);
         }
 
         public PropertyMapping(PropInfo source, PropInfo destination)

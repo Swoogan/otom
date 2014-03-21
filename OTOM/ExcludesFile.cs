@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Otom.Core
 {
-    public class ExcludesFile
+    public static class ExcludesFile
     {
-
+        public static readonly List<string> Excludes = new List<string> { "Codes", "CodeKeys", "CodeKeyGuids", "Invoice", "InvoiceDetail", "InvoiceHeader" };
     }
 }

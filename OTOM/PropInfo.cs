@@ -1,6 +1,4 @@
-﻿
-using System;
-using System.Reflection;
+﻿using System;
 
 namespace Otom.Core
 {
@@ -10,22 +8,11 @@ namespace Otom.Core
         public string Type { get; set; }
         public string FullName { get; set; }
 
-        public PropInfo(PropertyInfo info)
+        public PropInfo(string name, Type type)
         {
-            Name = info.Name;
-            Type = info.DeclaringType.Name;
-            FullName = info.DeclaringType.FullName;
-        }
-
-        public PropertyInfo GetPropertyInfo(Assembly assembly)
-        {
-            var type = assembly.GetType(Type);
-            var property = type.GetProperty(Name);
-
-            if (property == null)
-                throw new ArgumentException("Unable to find property [" + Name + "] in type [" + Type + "]");
-
-            return property;
+            Name = name;
+            Type = type.Name;
+            FullName = type.FullName;
         }
     }
 }

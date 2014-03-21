@@ -74,42 +74,44 @@ namespace Otom
         {
             lbPairs.Items.Clear();
 
-            var classInfo = new AssemblyInfo(txtAssemblySource.Text);
-
+            var source = new AssemblyInfo(txtAssemblySource.Text);
+            
             if (txtAssemblyDestination.Text.Equals(txtAssemblySource.Text))
             {
-                var classes = classInfo.GetClasses();
-                BindListBox(lbClassSource, classes, "Name");
-                BindListBox(lbClassDestination, classes, "Name");
+                var classes = source.GetClasses();
+                BindClassListBox(lbClassSource, classes, "Name");
+                BindClassListBox(lbClassDestination, classes, "Name");
+                _mapping = new Mapping(source, source);
             }
             else
             {
-                BindListBox(lbClassSource, classInfo.GetClasses(), "Name");
-                var destInfo = new AssemblyInfo(txtAssemblyDestination.Text);
-                BindListBox(lbClassDestination, destInfo.GetClasses(), "Name");
+                BindClassListBox(lbClassSource, source.GetClasses(), "Name");
+                var destination = new AssemblyInfo(txtAssemblyDestination.Text);
+                BindClassListBox(lbClassDestination, destination.GetClasses(), "Name");
+                _mapping = new Mapping(source, destination);
             }
         }
 
-        private static void BindListBox(ListControl listBox, IEnumerable<ClassInfo> collection, String displayName)
+        private static void BindClassListBox(ListControl listBox, IEnumerable<ClassInfo> collection, String displayName)
         {
             listBox.DataSource = collection.OrderBy(c => c.Name).ToList();
             listBox.DisplayMember = displayName;
         }
 
-        private static void BindListBox(ListControl listBox, IEnumerable<PropertyInfo> collection, String displayName)
-        {
-            listBox.DataSource = collection.OrderBy(p => p.Name).ToList();
-            listBox.DisplayMember = displayName;
-        }
-
         private void cbClassSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindListBox(lbPropertySource, SourceClass.Properties, "Name");
+            BindPropertyListBox(lbPropertySource, SourceClass.Properties, "Name");
         }
 
         private void cbClassDestination_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BindListBox(lbPropertyDestination, DestClass.Properties, "Name");
+            BindPropertyListBox(lbPropertyDestination, DestClass.Properties, "Name");
+        }
+
+        private static void BindPropertyListBox(ListControl listBox, IEnumerable<PropertyInfo> collection, String displayName)
+        {
+            listBox.DataSource = collection.OrderBy(p => p.Name).ToList();
+            listBox.DisplayMember = displayName;
         }
 
         private void btnAddMapping_Click(object sender, EventArgs e)
@@ -128,8 +130,8 @@ namespace Otom
             {
                 var pairs = new List<PropertyMapping>(lbPairs.Items.Count);
                 pairs.AddRange(lbPairs.Items.Cast<PropertyMapping>());
-                var mapping = ObjectMapper.Map(pairs, SourceClass, DestClass, cbIncludeReverseMapping.Checked);
-                new CodeMapping(mapping).ShowDialog(this);
+                var generatedCode = ObjectMapper.Map(pairs, SourceClass, DestClass, cbIncludeReverseMapping.Checked);
+                new CodeMapping(generatedCode).ShowDialog(this);
             }
             else
             {

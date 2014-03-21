@@ -5,7 +5,7 @@ namespace Otom
 {
     public partial class CodeMapping : Form
     {
-        public CodeMapping(String codeMapping)
+        public CodeMapping(string codeMapping)
         {
             InitializeComponent();
             txtGeneratedCode.Text = codeMapping;

@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -11,14 +10,9 @@ namespace Otom.Core
     [Serializable]
     public class Mapping
     {
-        private readonly Assembly _destInfo;
-        private readonly Assembly _sourceInfo;
-        private List<PropertyMapping> _propertyMappings;
-
-        public List<PropertyMapping> PropertyMappings
-        {
-            get { return _propertyMappings; }
-        }
+        private readonly AssemblyInfo _destInfo;
+        private readonly AssemblyInfo _sourceInfo;
+        public List<PropertyMapping> PropertyMappings { get; private set; }
 
         public string SourceAssembly 
         {
@@ -30,12 +24,12 @@ namespace Otom.Core
             get { return _destInfo.Location; }
         }
 
-        public Mapping(Assembly source, Assembly destination, IEnumerable pairs)
+        public Mapping(AssemblyInfo source, AssemblyInfo destination)
         {
             _sourceInfo = source;
             _destInfo = destination;
 
-            _propertyMappings = new List<PropertyMapping>();
+            PropertyMappings = new List<PropertyMapping>();
         }
 
         public void SaveToDisk(string path)
@@ -50,12 +44,12 @@ namespace Otom.Core
 
         public Type GetFirstSource()
         {
-            return _sourceInfo.GetType(_propertyMappings[0].Source.Type);
+            return _sourceInfo.GetType(PropertyMappings[0].Source.Type);
         }
 
         public Type GetFirstDest()
         {
-            return _destInfo.GetType(_propertyMappings[0].Destination.Type);
+            return _destInfo.GetType(PropertyMappings[0].Destination.Type);
         }
 
         public static Mapping LoadFromDisk(string path)
@@ -74,9 +68,9 @@ namespace Otom.Core
 
         public void SetPairs(IEnumerable pairs)
         {
-            _propertyMappings = new List<PropertyMapping>();
+            PropertyMappings = new List<PropertyMapping>();
             foreach (PropertyMapping pair in pairs)
-                _propertyMappings.Add(pair);
+                PropertyMappings.Add(pair);
         }
     }
 }
