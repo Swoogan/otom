@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTOM", "OTOM\OTOM.csproj", "{D6221C47-F63F-476F-B438-1FFEEE5E6D51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otom.Core", "OTOM\Otom.Core.csproj", "{D6221C47-F63F-476F-B438-1FFEEE5E6D51}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OTOMUI", "OTOMUI\OTOMUI.csproj", "{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Otom", "OTOMUI\Otom.csproj", "{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{44B4CF58-03E2-4710-996B-B294DDE07F94}"
+	ProjectSection(SolutionItems) = preProject
+		LICENSE = LICENSE
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
