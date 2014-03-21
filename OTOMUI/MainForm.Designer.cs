@@ -129,7 +129,6 @@
             // 
             this.lbClassSource.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.lbClassSource.FormattingEnabled = true;
             this.lbClassSource.Location = new System.Drawing.Point(12, 191);
             this.lbClassSource.Name = "lbClassSource";
             this.lbClassSource.Size = new System.Drawing.Size(242, 212);
@@ -142,7 +141,6 @@
             this.lbClassDestination.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbClassDestination.FormattingEnabled = true;
             this.lbClassDestination.Location = new System.Drawing.Point(278, 191);
             this.lbClassDestination.Name = "lbClassDestination";
             this.lbClassDestination.Size = new System.Drawing.Size(199, 212);
@@ -198,7 +196,6 @@
             // 
             this.lbPropertyDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.lbPropertyDestination.FormattingEnabled = true;
             this.lbPropertyDestination.Location = new System.Drawing.Point(278, 435);
             this.lbPropertyDestination.Name = "lbPropertyDestination";
             this.lbPropertyDestination.Size = new System.Drawing.Size(199, 225);
@@ -208,7 +205,6 @@
             // lbPropertySource
             // 
             this.lbPropertySource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lbPropertySource.FormattingEnabled = true;
             this.lbPropertySource.Location = new System.Drawing.Point(12, 435);
             this.lbPropertySource.Name = "lbPropertySource";
             this.lbPropertySource.Size = new System.Drawing.Size(242, 225);

@@ -1,0 +1,5 @@
+- Add vertical and horizontal splitters to the ui
+- Move the generated code to a template
+- Move the class excludes to a file
+- Add a list of property excludes
+- Command line arugements to specify dlls (and classes?)
