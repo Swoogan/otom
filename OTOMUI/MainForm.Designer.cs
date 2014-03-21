@@ -202,6 +202,7 @@
             this.lbPropertyDestination.Location = new System.Drawing.Point(278, 435);
             this.lbPropertyDestination.Name = "lbPropertyDestination";
             this.lbPropertyDestination.Size = new System.Drawing.Size(199, 225);
+            this.lbPropertyDestination.Sorted = true;
             this.lbPropertyDestination.TabIndex = 11;
             // 
             // lbPropertySource
@@ -211,6 +212,7 @@
             this.lbPropertySource.Location = new System.Drawing.Point(12, 435);
             this.lbPropertySource.Name = "lbPropertySource";
             this.lbPropertySource.Size = new System.Drawing.Size(242, 225);
+            this.lbPropertySource.Sorted = true;
             this.lbPropertySource.TabIndex = 10;
             // 
             // btnAddMapping

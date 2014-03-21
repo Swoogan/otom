@@ -194,8 +194,8 @@ namespace Otom
                 // TODO: Re-validate that they entered stuff
                 var mapfile = new MapFile
                 {
-                    Destination = new MapTarget(txtAssemblySource.Text, SourceClass),
-                    Source = new MapTarget(txtAssemblyDestination.Text, DestClass),
+                    Source = new MapTarget(txtAssemblySource.Text, SourceClass),
+                    Destination = new MapTarget(txtAssemblyDestination.Text, DestClass),
                     PropertyPairs = lbPairs.Items.Cast<PropertyPair>().ToList()
                 };
                 
