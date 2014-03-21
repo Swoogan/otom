@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 using Otom.Core;
+using Otom.Core.Generate;
 using Otom.Properties;
+using ClassInfo = Otom.Core.ClassInfo;
 
 namespace Otom
 {
@@ -49,7 +50,6 @@ namespace Otom
             if (sourceAssemblyDialog.ShowDialog() != DialogResult.OK) return;
             txtAssemblySource.Text = sourceAssemblyDialog.FileName;
 
-            Settings.Default.LastSourceAssembly = sourceAssemblyDialog.FileName;
             Settings.Default.SourceInitialDir = Path.GetDirectoryName(sourceAssemblyDialog.FileName);
             Settings.Default.Save();
         }
@@ -60,7 +60,6 @@ namespace Otom
             if (destAssemblyDialog.ShowDialog() != DialogResult.OK) return;
             txtAssemblyDestination.Text = destAssemblyDialog.FileName;
 
-            Settings.Default.LastDestinationAssembly = sourceAssemblyDialog.FileName;
             Settings.Default.DestInitialDir = Path.GetDirectoryName(destAssemblyDialog.FileName);
             Settings.Default.Save();
         }
@@ -72,6 +71,23 @@ namespace Otom
 
         private void LoadAssemblies()
         {
+            if (string.IsNullOrWhiteSpace(txtAssemblySource.Text))
+            {
+                MessageBox.Show(Resources.SelectSource);
+                return;
+            }
+            
+            if (string.IsNullOrWhiteSpace(txtAssemblyDestination.Text))
+            {
+                MessageBox.Show(Resources.SelectDestination);
+                return;
+            }
+
+            // TODO: This should only run if the assemblies successfully load
+            Settings.Default.LastSourceAssembly = sourceAssemblyDialog.FileName;
+            Settings.Default.LastDestinationAssembly = sourceAssemblyDialog.FileName;
+            Settings.Default.Save();
+
             lbPairs.Items.Clear();
 
             var source = new AssemblyInfo(txtAssemblySource.Text);
@@ -108,7 +124,7 @@ namespace Otom
             BindPropertyListBox(lbPropertyDestination, DestClass.Properties, "Name");
         }
 
-        private static void BindPropertyListBox(ListControl listBox, IEnumerable<PropertyInfo> collection, String displayName)
+        private static void BindPropertyListBox(ListControl listBox, IEnumerable<PropInfo> collection, String displayName)
         {
             listBox.DataSource = collection.OrderBy(p => p.Name).ToList();
             listBox.DisplayMember = displayName;
@@ -118,8 +134,8 @@ namespace Otom
         {
             if (lbPropertySource.SelectedItem == null || lbPropertyDestination.SelectedItem == null) return;
 
-            var source = (PropertyInfo) lbPropertySource.SelectedItem;
-            var dest = (PropertyInfo) lbPropertyDestination.SelectedItem;
+            var source = (PropInfo) lbPropertySource.SelectedItem;
+            var dest = (PropInfo) lbPropertyDestination.SelectedItem;
             var pair = new PropertyMapping(source, dest);
             lbPairs.Items.Add(pair);
         }
@@ -130,8 +146,14 @@ namespace Otom
             {
                 var pairs = new List<PropertyMapping>(lbPairs.Items.Count);
                 pairs.AddRange(lbPairs.Items.Cast<PropertyMapping>());
-                var generatedCode = ObjectMapper.Map(pairs, SourceClass, DestClass, cbIncludeReverseMapping.Checked);
-                new CodeMapping(generatedCode).ShowDialog(this);
+                var generatedCode = CodeGenerator.Generate(new GenerateInfo
+                {
+                  SourceClass = new Core.Generate.ClassInfo(SourceClass), 
+                  DestinationClass = new Core.Generate.ClassInfo(DestClass),
+                  Pairs = pairs, 
+                  Reverse = cbIncludeReverseMapping.Checked
+                });
+                new GeneratedCodeForm(generatedCode).ShowDialog(this);
             }
             else
             {

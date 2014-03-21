@@ -10,12 +10,6 @@ namespace Otom
         public AboutForm()
         {
             InitializeComponent();
-            Text = String.Format("About {0} {0}", AssemblyTitle);
-            labelProductName.Text = AssemblyProduct;
-            labelVersion.Text = String.Format("Version {0} {0}", AssemblyVersion);
-            labelCopyright.Text = AssemblyCopyright;
-            labelCompanyName.Text = AssemblyCompany;
-            textBoxDescription.Text = AssemblyDescription;
         }
 
         #region Assembly Attribute Accessors
@@ -101,6 +95,16 @@ namespace Otom
         private void okButton_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void AboutForm_Load(object sender, EventArgs e)
+        {
+            Text = String.Format("About {0} {0}", AssemblyTitle);
+            labelProductName.Text = AssemblyProduct;
+            labelVersion.Text = String.Format("Version {0} {0}", AssemblyVersion);
+            labelCopyright.Text = AssemblyCopyright;
+            labelCompanyName.Text = AssemblyCompany;
+            textBoxDescription.Text = AssemblyDescription;
         }
     }
 }

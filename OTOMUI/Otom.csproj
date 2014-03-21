@@ -69,11 +69,11 @@
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="CodeMapping.cs">
+    <Compile Include="GeneratedCodeForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CodeMapping.Designer.cs">
-      <DependentUpon>CodeMapping.cs</DependentUpon>
+    <Compile Include="GeneratedCodeForm.Designer.cs">
+      <DependentUpon>GeneratedCodeForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Constants.cs" />
     <Compile Include="MainForm.cs">
@@ -88,8 +88,8 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="CodeMapping.resx">
-      <DependentUpon>CodeMapping.cs</DependentUpon>
+    <EmbeddedResource Include="GeneratedCodeForm.resx">
+      <DependentUpon>GeneratedCodeForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">

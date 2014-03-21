@@ -121,4 +121,10 @@
   <data name="Logo_copy" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\graphics\Logo copy.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SelectSource" xml:space="preserve">
+    <value>Please select a source assembly</value>
+  </data>
+  <data name="SelectDestination" xml:space="preserve">
+    <value>Please select a destination assembly</value>
+  </data>
 </root>

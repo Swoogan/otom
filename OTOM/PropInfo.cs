@@ -2,6 +2,7 @@
 
 namespace Otom.Core
 {
+    [Serializable]
     public class PropInfo
     {
         public string Name { get; set; }

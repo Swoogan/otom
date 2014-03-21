@@ -5,6 +5,7 @@ using System.Reflection;
 
 namespace Otom.Core
 {
+    [Serializable]
     public class AssemblyInfo
     {
         private readonly Assembly _assembly;
@@ -16,6 +17,9 @@ namespace Otom.Core
 
         public AssemblyInfo(string assemblyPath)
         {
+            if (string.IsNullOrWhiteSpace(assemblyPath))
+                throw new ArgumentException("Assembly path is empty", "assemblyPath");
+
             _assembly = Assembly.LoadFrom(assemblyPath);
         }
 
