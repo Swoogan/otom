@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace OTOMUI
+namespace Otom
 {
     static class Program
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{92B13A0B-0E40-4C76-821F-EE2A24FB92FF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OTOMUI</RootNamespace>
-    <AssemblyName>OTOMUI</AssemblyName>
+    <RootNamespace>Otom</RootNamespace>
+    <AssemblyName>Otom</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>Otom.ico</ApplicationIcon>
@@ -75,6 +75,7 @@
     <Compile Include="CodeMapping.Designer.cs">
       <DependentUpon>CodeMapping.cs</DependentUpon>
     </Compile>
+    <Compile Include="Constants.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

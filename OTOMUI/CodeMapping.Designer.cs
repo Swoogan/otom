@@ -1,4 +1,4 @@
-﻿namespace OTOMUI
+﻿namespace Otom
 {
     partial class CodeMapping
     {

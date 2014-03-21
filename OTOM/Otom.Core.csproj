@@ -8,8 +8,8 @@
     <ProjectGuid>{D6221C47-F63F-476F-B438-1FFEEE5E6D51}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OTOM</RootNamespace>
-    <AssemblyName>OTOM</AssemblyName>
+    <RootNamespace>Otom.Core</RootNamespace>
+    <AssemblyName>Otom.Core</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>

@@ -6,9 +6,9 @@ using System.Reflection;
 using System.Windows.Forms;
 
 using OTOM;
-using OTOMUI.Properties;
+using Otom.Properties;
 
-namespace OTOMUI
+namespace Otom
 {
     public partial class MainForm : Form
     {
@@ -20,7 +20,7 @@ namespace OTOMUI
 
             var args = Environment.GetCommandLineArgs();
 
-            foreach (var arg in args.Where(arg => arg.Contains(OtomConstants.FileExtention)))
+            foreach (var arg in args.Where(arg => arg.Contains(Constants.FileExtention)))
                 LoadMapping(arg);
         }
 
@@ -181,7 +181,7 @@ namespace OTOMUI
 
         private string GenerateFileName()
         {
-            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, OtomConstants.FileExtention);
+            return string.Format("{0}To{1}{2}", SourceClass.Name, DestClass.Name, Constants.FileExtention);
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)

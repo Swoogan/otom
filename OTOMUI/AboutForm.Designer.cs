@@ -1,4 +1,4 @@
-﻿namespace OTOMUI
+﻿namespace Otom
 {
     partial class AboutForm
     {
@@ -67,7 +67,7 @@
             // logoPictureBox
             // 
             this.logoPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.logoPictureBox.Image = global::OTOMUI.Properties.Resources.Logo_copy;
+            this.logoPictureBox.Image = global::Otom.Properties.Resources.Logo_copy;
             this.logoPictureBox.Location = new System.Drawing.Point(3, 3);
             this.logoPictureBox.Name = "logoPictureBox";
             this.tableLayoutPanel.SetRowSpan(this.logoPictureBox, 6);
